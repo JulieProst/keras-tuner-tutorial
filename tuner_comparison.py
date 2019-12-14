@@ -1,3 +1,5 @@
+import time
+
 from kerastuner.tuners import RandomSearch
 from tensorflow.keras.datasets import cifar10
 
@@ -25,7 +27,10 @@ def run_hyperparameter_tuning():
     tuner.search_space_summary()
 
     # Performs the hypertuning.
+    search_start = time.time()
     tuner.search(x_train, y_train, epochs=N_EPOCH_SEARCH, validation_split=0.1)
+    search_end = time.time()
+    print(f'Elapsed time = {search_end - search_start:10.6f} s')
 
     # Show a summary of the search
     tuner.results_summary()
