@@ -2,10 +2,10 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 NUM_CLASSES = 10
-INPUT_SHAPE = (28, 28)
+INPUT_SHAPE = (32, 32, 3)
 
 
-def build_simple_mnist_model(hp):
+def build_simple_model(hp):
     model = keras.Sequential()
     model.add(layers.Flatten(input_shape=INPUT_SHAPE))
     model.add(

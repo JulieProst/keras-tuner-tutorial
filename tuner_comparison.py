@@ -1,5 +1,5 @@
-from tensorflow.keras.datasets import mnist
 from kerastuner.tuners import RandomSearch
+from tensorflow.keras.datasets import cifar10
 
 from model import build_simple_model
 
@@ -9,8 +9,7 @@ EXECUTION_PER_TRIAL = 1
 
 
 def run_hyperparameter_tuning():
-    # Load MNIST dataset
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
     x_train = x_train.astype('float32') / 255.
     x_test = x_test.astype('float32') / 255.
 
@@ -19,7 +18,7 @@ def run_hyperparameter_tuning():
         objective='val_accuracy',
         max_trials=MAX_TRIALS,
         executions_per_trial=EXECUTION_PER_TRIAL,
-        directory='mnist_random_search',
+        directory='cifar10_random_search',
         project_name='helloworld')
 
     # Overview of the task
