@@ -1,28 +1,9 @@
-from tensorflow import keras
-from tensorflow.keras import layers
 from tensorflow.keras.datasets import mnist
 from kerastuner.tuners import RandomSearch
 
+from model import build_simple_model
 
 NUM_CLASSES = 10
-
-
-def build_model(hp):
-    model = keras.Sequential()
-    model.add(layers.Flatten(input_shape=(28, 28)))
-    model.add(layers.Dense(units=hp.Int('units',
-                                        min_value=32,
-                                        max_value=512,
-                                        step=32),
-                           activation='relu'))
-    model.add(layers.Dense(NUM_CLASSES, activation='softmax'))
-    model.compile(
-        optimizer=keras.optimizers.Adam(
-            hp.Choice('learning_rate',
-                      values=[1e-2, 1e-3, 1e-4])),
-        loss='sparse_categorical_crossentropy',
-        metrics=['accuracy'])
-    return model
 
 
 def run_hyperparameter_tuning():
@@ -32,7 +13,7 @@ def run_hyperparameter_tuning():
     x_test = x_test.astype('float32') / 255.
 
     tuner = RandomSearch(
-        build_model,
+        build_simple_model,
         objective='val_accuracy',
         max_trials=2,
         executions_per_trial=1,
