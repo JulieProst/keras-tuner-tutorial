@@ -3,7 +3,9 @@ from kerastuner.tuners import RandomSearch
 
 from model import build_simple_model
 
-NUM_CLASSES = 10
+N_EPOCH_SEARCH = 10
+MAX_TRIALS = 2
+EXECUTION_PER_TRIAL = 1
 
 
 def run_hyperparameter_tuning():
@@ -15,8 +17,8 @@ def run_hyperparameter_tuning():
     tuner = RandomSearch(
         build_simple_model,
         objective='val_accuracy',
-        max_trials=2,
-        executions_per_trial=1,
+        max_trials=MAX_TRIALS,
+        executions_per_trial=EXECUTION_PER_TRIAL,
         directory='mnist_random_search',
         project_name='helloworld')
 
@@ -24,7 +26,7 @@ def run_hyperparameter_tuning():
     tuner.search_space_summary()
 
     # Performs the hypertuning.
-    tuner.search(x_train, y_train, epochs=10, validation_split=0.1)
+    tuner.search(x_train, y_train, epochs=N_EPOCH_SEARCH, validation_split=0.1)
 
     # Show a summary of the search
     tuner.results_summary()
