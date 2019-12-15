@@ -69,8 +69,9 @@ class CNNHyperModel(HyperModel):
             Dropout(rate=hp.Float(
                 'dropout_1',
                 min_value=0.0,
-                max_value=0.9,
-                default=0.25
+                max_value=0.6,
+                default=0.25,
+                step=0.05,
             ))
         )
         model.add(Flatten())
@@ -83,7 +84,11 @@ class CNNHyperModel(HyperModel):
                     step=32,
                     default=128
                 ),
-                activation='relu'
+                activation=hp.Choice(
+                    'dense_activation',
+                    values=['relu', 'tanh', 'sigmoid'],
+                    default='relu'
+                )
             )
         )
         model.add(
@@ -91,8 +96,9 @@ class CNNHyperModel(HyperModel):
                 rate=hp.Float(
                     'dropout_2',
                     min_value=0.0,
-                    max_value=0.9,
-                    default=0.25
+                    max_value=0.6,
+                    default=0.25,
+                    step=0.05
                 )
             )
         )
@@ -100,9 +106,11 @@ class CNNHyperModel(HyperModel):
 
         model.compile(
             optimizer=keras.optimizers.Adam(
-                hp.Choice(
+                hp.Float(
                     'learning_rate',
-                    values=[1e-2, 1e-3, 1e-4],
+                    min_value=1e-5,
+                    max_value=1e-2,
+                    sampling='LOG',
                     default=1e-3
                 )
             ),
