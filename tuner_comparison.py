@@ -8,6 +8,7 @@ from hypermodels import CNNHyperModel
 N_EPOCH_SEARCH = 10
 MAX_TRIALS = 2
 EXECUTION_PER_TRIAL = 1
+SEED = 1
 
 NUM_CLASSES = 10
 INPUT_SHAPE = (32, 32, 3)
@@ -23,10 +24,12 @@ def run_hyperparameter_tuning():
     tuner = RandomSearch(
         hypermodel,
         objective='val_accuracy',
+        seed=SEED,
         max_trials=MAX_TRIALS,
         executions_per_trial=EXECUTION_PER_TRIAL,
         directory='cifar10_random_search',
-        project_name='simple_cnn')
+        project_name='simple_cnn'
+    )
 
     # Overview of the task
     tuner.search_space_summary()
