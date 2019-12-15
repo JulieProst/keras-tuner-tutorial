@@ -3,11 +3,14 @@ import time
 from kerastuner.tuners import RandomSearch
 from tensorflow.keras.datasets import cifar10
 
-from model import build_simple_model
+from hypermodels import CNNHyperModel
 
 N_EPOCH_SEARCH = 10
 MAX_TRIALS = 2
 EXECUTION_PER_TRIAL = 1
+
+NUM_CLASSES = 10
+INPUT_SHAPE = (32, 32, 3)
 
 
 def run_hyperparameter_tuning():
@@ -15,13 +18,15 @@ def run_hyperparameter_tuning():
     x_train = x_train.astype('float32') / 255.
     x_test = x_test.astype('float32') / 255.
 
+    hypermodel = CNNHyperModel(input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES)
+
     tuner = RandomSearch(
-        build_simple_model,
+        hypermodel,
         objective='val_accuracy',
         max_trials=MAX_TRIALS,
         executions_per_trial=EXECUTION_PER_TRIAL,
         directory='cifar10_random_search',
-        project_name='helloworld')
+        project_name='simple_cnn')
 
     # Overview of the task
     tuner.search_space_summary()
