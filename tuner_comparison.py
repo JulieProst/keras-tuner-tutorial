@@ -26,8 +26,12 @@ def run_hyperparameter_tuning():
 
     tuners = define_tuners(hypermodel, directory='cifar10', project_name='simple_cnn_tuning')
 
+    results = []
     for tuner in tuners:
-        tuner_evaluation(tuner, x_test, x_train, y_test, y_train)
+        elapsed_time, loss, accuracy = tuner_evaluation(tuner, x_test, x_train, y_test, y_train)
+        print(f'Elapsed time = {elapsed_time:10.6f} s, accuracy = {accuracy}, loss = {loss}')
+        results.add([elapsed_time, loss, accuracy])
+    print(results)
 
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
@@ -38,7 +42,7 @@ def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
     search_start = time.time()
     tuner.search(x_train, y_train, epochs=N_EPOCH_SEARCH, validation_split=0.1)
     search_end = time.time()
-    print(f'Elapsed time = {search_end - search_start:10.6f} s')
+    elapsed_time = search_end - search_start
 
     # Show a summary of the search
     tuner.results_summary()
@@ -48,8 +52,7 @@ def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
 
     # Evaluate the best model.
     loss, accuracy = best_model.evaluate(x_test, y_test)
-    print('loss:', loss)
-    print('accuracy:', accuracy)
+    return elapsed_time, loss, accuracy
 
 
 def define_tuners(hypermodel, directory, project_name):
