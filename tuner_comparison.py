@@ -1,5 +1,6 @@
 import time
 
+from loguru import logger
 from kerastuner.tuners import BayesianOptimization, Hyperband, RandomSearch
 from tensorflow.keras.datasets import cifar10
 
@@ -29,9 +30,9 @@ def run_hyperparameter_tuning():
     results = []
     for tuner in tuners:
         elapsed_time, loss, accuracy = tuner_evaluation(tuner, x_test, x_train, y_test, y_train)
-        print(f'Elapsed time = {elapsed_time:10.6f} s, accuracy = {accuracy}, loss = {loss}')
-        results.add([elapsed_time, loss, accuracy])
-    print(results)
+        logger.info(f'Elapsed time = {elapsed_time:10.4f} s, accuracy = {accuracy}, loss = {loss}')
+        results.append([elapsed_time, loss, accuracy])
+    logger.info(results)
 
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):

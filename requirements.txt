@@ -15,6 +15,7 @@ joblib==0.14.0
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.0
 keras-tuner==1.0.0
+loguru==0.4.0
 Markdown==3.1.1
 numpy==1.17.4
 oauthlib==3.1.0
