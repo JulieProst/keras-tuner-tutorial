@@ -11,8 +11,8 @@ SEED = 1
 NUM_CLASSES = 10
 INPUT_SHAPE = (32, 32, 3)
 
-N_EPOCH_SEARCH = 40
-HYPERBAND_MAX_EPOCHS = 50
+N_EPOCH_SEARCH = 20
+HYPERBAND_MAX_EPOCHS = 30
 MAX_TRIALS = 10
 EXECUTION_PER_TRIAL = 2
 BAYESIAN_NUM_INITIAL_POINTS = 3
@@ -25,7 +25,7 @@ def run_hyperparameter_tuning():
 
     hypermodel = CNNHyperModel(input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES)
 
-    tuners = define_tuners(hypermodel, directory='cifar10', project_name='simple_cnn_tuning')
+    tuners = define_tuners(hypermodel, directory='results/cifar10', project_name='simple_cnn_tuning')
 
     results = []
     for tuner in tuners:

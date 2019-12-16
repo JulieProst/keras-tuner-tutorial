@@ -18,11 +18,35 @@ class CNNHyperModel(HyperModel):
         model = keras.Sequential()
         model.add(
             Conv2D(
-                filters=32,
-                kernel_size=(3, 3),
+                filters=16,
+                kernel_size=3,
                 activation='relu',
                 input_shape=self.input_shape
             )
+        )
+        model.add(
+            Conv2D(
+                filters=16,
+                activation='relu',
+                kernel_size=3
+            )
+        )
+        model.add(MaxPooling2D(pool_size=2))
+        model.add(
+            Conv2D(
+                filters=32,
+                kernel_size=3,
+                activation='relu'
+            )
+        )
+        model.add(
+            Dropout(rate=hp.Float(
+                'dropout_1',
+                min_value=0.0,
+                max_value=0.5,
+                default=0.25,
+                step=0.05,
+            ))
         )
         model.add(
             Conv2D(
@@ -32,15 +56,15 @@ class CNNHyperModel(HyperModel):
                     default=64,
                 ),
                 activation='relu',
-                kernel_size=(3, 3)
+                kernel_size=3
             )
         )
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(MaxPooling2D(pool_size=2))
         model.add(
             Dropout(rate=hp.Float(
-                'dropout_1',
+                'dropout_2',
                 min_value=0.0,
-                max_value=0.6,
+                max_value=0.5,
                 default=0.25,
                 step=0.05,
             ))
@@ -65,9 +89,9 @@ class CNNHyperModel(HyperModel):
         model.add(
             Dropout(
                 rate=hp.Float(
-                    'dropout_2',
+                    'dropout_3',
                     min_value=0.0,
-                    max_value=0.6,
+                    max_value=0.5,
                     default=0.25,
                     step=0.05
                 )
