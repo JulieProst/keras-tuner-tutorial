@@ -21,7 +21,7 @@ pip install requirements.txt
 
 ### Results
 
-Tasks duration was measured on CPU
+Tasks duration was measured on an RTX 2080 GPU
 
 
 ### Run the comparison
