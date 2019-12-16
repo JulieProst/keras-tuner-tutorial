@@ -1,7 +1,12 @@
 import time
 
+import tensorflow as tf
+from kerastuner.tuners import (
+    BayesianOptimization,
+    Hyperband,
+    RandomSearch,
+)
 from loguru import logger
-from kerastuner.tuners import BayesianOptimization, Hyperband, RandomSearch
 from tensorflow.keras.datasets import cifar10
 
 from hypermodels import CNNHyperModel
@@ -36,6 +41,12 @@ def run_hyperparameter_tuning():
 
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
+    # Set up GPU config
+    physical_devices = tf.config.experimental.list_physical_devices("GPU")
+    if physical_devices:
+        for device in physical_devices:
+            tf.config.experimental.set_memory_growth(device, True)
+
     # Overview of the task
     tuner.search_space_summary()
 
