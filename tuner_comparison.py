@@ -1,4 +1,3 @@
-import csv
 import time
 from pathlib import Path
 
@@ -25,14 +24,6 @@ EXECUTION_PER_TRIAL = 2
 BAYESIAN_NUM_INITIAL_POINTS = 5
 
 
-def results_to_file(results, output_dir):
-    output_file = Path(output_dir, "results.csv")
-    with open(output_file, 'w') as file:
-        writer = csv.writer(file)
-        for row in results:
-            writer.writerow(row)
-
-
 def run_hyperparameter_tuning():
     (x_train, y_train), (x_test, y_test) = cifar10.load_data()
     x_train = x_train.astype('float32') / 255.
@@ -49,7 +40,6 @@ def run_hyperparameter_tuning():
         logger.info(f'Elapsed time = {elapsed_time:10.4f} s, accuracy = {accuracy}, loss = {loss}')
         results.append([elapsed_time, loss, accuracy])
     logger.info(results)
-    results_to_file(results, Path("./output/"))
 
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
