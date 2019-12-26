@@ -54,6 +54,7 @@ def run_hyperparameter_tuning():
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
     # Set up GPU config
+    logger.info("Setting up GPU if found")
     physical_devices = tf.config.experimental.list_physical_devices("GPU")
     if physical_devices:
         for device in physical_devices:
@@ -63,6 +64,7 @@ def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
     tuner.search_space_summary()
 
     # Performs the hyperparameter tuning
+    logger.info("Start hyperparameter tuning")
     search_start = time.time()
     tuner.search(x_train, y_train, epochs=N_EPOCH_SEARCH, validation_split=0.1)
     search_end = time.time()
