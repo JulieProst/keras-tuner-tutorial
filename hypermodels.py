@@ -103,7 +103,7 @@ class CNNHyperModel(HyperModel):
             optimizer=keras.optimizers.Adam(
                 hp.Float(
                     'learning_rate',
-                    min_value=1e-5,
+                    min_value=1e-4,
                     max_value=1e-2,
                     sampling='LOG',
                     default=1e-3
