@@ -1,4 +1,6 @@
+import csv
 import time
+from pathlib import Path
 
 import tensorflow as tf
 from kerastuner.tuners import (
@@ -20,7 +22,15 @@ N_EPOCH_SEARCH = 20
 HYPERBAND_MAX_EPOCHS = 30
 MAX_TRIALS = 10
 EXECUTION_PER_TRIAL = 2
-BAYESIAN_NUM_INITIAL_POINTS = 3
+BAYESIAN_NUM_INITIAL_POINTS = 5
+
+
+def results_to_file(results, output_dir):
+    output_file = Path(output_dir, "results.csv")
+    with open(output_file, 'w') as file:
+        writer = csv.writer(file)
+        for row in results:
+            writer.writerow(row)
 
 
 def run_hyperparameter_tuning():
@@ -30,7 +40,8 @@ def run_hyperparameter_tuning():
 
     hypermodel = CNNHyperModel(input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES)
 
-    tuners = define_tuners(hypermodel, directory='results/cifar10', project_name='simple_cnn_tuning')
+    output_dir = Path("./output/cifar10/")
+    tuners = define_tuners(hypermodel, directory=output_dir, project_name='simple_cnn_tuning')
 
     results = []
     for tuner in tuners:
@@ -38,6 +49,7 @@ def run_hyperparameter_tuning():
         logger.info(f'Elapsed time = {elapsed_time:10.4f} s, accuracy = {accuracy}, loss = {loss}')
         results.append([elapsed_time, loss, accuracy])
     logger.info(results)
+    results_to_file(results, Path("./output/"))
 
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
