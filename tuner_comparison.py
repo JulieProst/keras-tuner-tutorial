@@ -1,4 +1,5 @@
 import time
+from pathlib import Path
 
 import tensorflow as tf
 from kerastuner.tuners import (
@@ -16,11 +17,11 @@ SEED = 1
 NUM_CLASSES = 10
 INPUT_SHAPE = (32, 32, 3)
 
-N_EPOCH_SEARCH = 20
-HYPERBAND_MAX_EPOCHS = 30
-MAX_TRIALS = 10
+N_EPOCH_SEARCH = 40
+HYPERBAND_MAX_EPOCHS = 40
+MAX_TRIALS = 20
 EXECUTION_PER_TRIAL = 2
-BAYESIAN_NUM_INITIAL_POINTS = 3
+BAYESIAN_NUM_INITIAL_POINTS = 5
 
 
 def run_hyperparameter_tuning():
@@ -30,7 +31,8 @@ def run_hyperparameter_tuning():
 
     hypermodel = CNNHyperModel(input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES)
 
-    tuners = define_tuners(hypermodel, directory='results/cifar10', project_name='simple_cnn_tuning')
+    output_dir = Path("./output/cifar10/")
+    tuners = define_tuners(hypermodel, directory=output_dir, project_name='simple_cnn_tuning')
 
     results = []
     for tuner in tuners:
@@ -42,6 +44,7 @@ def run_hyperparameter_tuning():
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
     # Set up GPU config
+    logger.info("Setting up GPU if found")
     physical_devices = tf.config.experimental.list_physical_devices("GPU")
     if physical_devices:
         for device in physical_devices:
@@ -51,6 +54,7 @@ def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
     tuner.search_space_summary()
 
     # Performs the hyperparameter tuning
+    logger.info("Start hyperparameter tuning")
     search_start = time.time()
     tuner.search(x_train, y_train, epochs=N_EPOCH_SEARCH, validation_split=0.1)
     search_end = time.time()
