@@ -6,6 +6,5 @@ venv/
 
 # Polyaxon files
 .polyaxonignore
-polyaxon_requirements.txt
 .polyaxon/
 polyaxon_experiments/
