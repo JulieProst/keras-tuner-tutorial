@@ -27,7 +27,6 @@ Tasks duration was measured on an RTX 2080 GPU
 |-----------------------|---------------|-------------------|
 | Random Search         | 10h 59min 21s | 76.8              |
 | Hyperband             | 10h 0min 21s  | 75.1              |
-| Bayesian Optimization |               |                   |
 
 Increases the worst set of hyperparameters by 10%
 
