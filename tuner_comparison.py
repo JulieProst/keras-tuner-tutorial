@@ -3,7 +3,6 @@ from pathlib import Path
 
 import tensorflow as tf
 from kerastuner.tuners import (
-    BayesianOptimization,
     Hyperband,
     RandomSearch,
 )
@@ -21,7 +20,6 @@ N_EPOCH_SEARCH = 40
 HYPERBAND_MAX_EPOCHS = 40
 MAX_TRIALS = 20
 EXECUTION_PER_TRIAL = 2
-BAYESIAN_NUM_INITIAL_POINTS = 5
 
 
 def run_hyperparameter_tuning():
@@ -90,17 +88,7 @@ def define_tuners(hypermodel, directory, project_name):
         directory=f'{directory}_hyperband',
         project_name=project_name
     )
-    bayesian_tuner = BayesianOptimization(
-        hypermodel,
-        objective='val_accuracy',
-        seed=SEED,
-        num_initial_points=BAYESIAN_NUM_INITIAL_POINTS,
-        max_trials=MAX_TRIALS,
-        executions_per_trial=EXECUTION_PER_TRIAL,
-        directory=f'{directory}_bayesian',
-        project_name=project_name
-    )
-    return [random_tuner, hyperband_tuner, bayesian_tuner]
+    return [random_tuner, hyperband_tuner]
 
 
 if __name__ == "__main__":
