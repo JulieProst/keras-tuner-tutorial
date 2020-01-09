@@ -1,12 +1,14 @@
 import time
 
-import tensorflow as tf
 from loguru import logger
-from tensorflow_core.python.keras.api._v2.keras.datasets import cifar10
 from tuner_comparison import (
     INPUT_SHAPE,
     NUM_CLASSES,
     N_EPOCH_SEARCH,
+)
+from utils import (
+    set_gpu_config,
+    load_data,
 )
 
 
@@ -20,16 +22,8 @@ def base_experiment():
         MaxPooling2D
     )
 
-    # Set up GPU config
-    logger.info("Setting up GPU if found")
-    physical_devices = tf.config.experimental.list_physical_devices("GPU")
-    if physical_devices:
-        for device in physical_devices:
-            tf.config.experimental.set_memory_growth(device, True)
-
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-    x_train = x_train.astype('float32') / 255.
-    x_test = x_test.astype('float32') / 255.
+    set_gpu_config()
+    x_test, x_train, y_test, y_train = load_data()
 
     model = keras.Sequential()
     model.add(
