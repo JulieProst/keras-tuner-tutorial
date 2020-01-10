@@ -25,17 +25,24 @@ Tasks duration was measured on an RTX 2080 GPU
 
 | Tuner                 | Search time   | Best accuracy (%) |
 |-----------------------|---------------|-------------------|
-| Random Search         | 10h 59min 21s | 76.8              |
-| Hyperband             | 10h 0min 21s  | 75.1              |
+| Random Baseline       | 20min | 72.8             |
+| Default Baseline      | 20min | 74.5              |
+| Random Search         | 10h 59min  | 76.8              |
+| Hyperband             | 10h 0min   | 75.1              |
 
 Increases the worst set of hyperparameters by 10%
+
+### Run the baseline
+
+```
+python baseline.py
+```
 
 ### Run the comparison
 Available tuners :
 
 - Random Search
 - Hyperband
-- Bayesian Optimization
 
 ```
 python tuner_comparison.py

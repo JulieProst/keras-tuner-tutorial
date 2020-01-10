@@ -10,6 +10,10 @@ from loguru import logger
 from tensorflow.keras.datasets import cifar10
 
 from hypermodels import CNNHyperModel
+from utils import (
+    set_gpu_config,
+    load_data,
+)
 
 SEED = 1
 
@@ -23,9 +27,7 @@ EXECUTION_PER_TRIAL = 2
 
 
 def run_hyperparameter_tuning():
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-    x_train = x_train.astype('float32') / 255.
-    x_test = x_test.astype('float32') / 255.
+    x_test, x_train, y_test, y_train = load_data()
 
     hypermodel = CNNHyperModel(input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES)
 
@@ -41,12 +43,7 @@ def run_hyperparameter_tuning():
 
 
 def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
-    # Set up GPU config
-    logger.info("Setting up GPU if found")
-    physical_devices = tf.config.experimental.list_physical_devices("GPU")
-    if physical_devices:
-        for device in physical_devices:
-            tf.config.experimental.set_memory_growth(device, True)
+    set_gpu_config()
 
     # Overview of the task
     tuner.search_space_summary()
