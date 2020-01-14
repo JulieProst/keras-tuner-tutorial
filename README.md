@@ -25,12 +25,14 @@ Tasks duration was measured on an RTX 2080 GPU
 
 | Tuner                 | Search time   | Best accuracy (%) |
 |-----------------------|---------------|-------------------|
-| Random Baseline       | 20min | 72.8             |
+| Worst Baseline       | 20min | 63.1             |
 | Default Baseline      | 20min | 74.5              |
 | Random Search         | 10h 59min  | 76.8              |
 | Hyperband             | 10h 0min   | 75.1              |
 
-Increases the worst set of hyperparameters by 10%
+Here, the worst baseline is the worst accuracy obtained by a set of hyperparameters 
+during random search.
+The default baseline is obtained by setting all hyperparameters to their default value.
 
 ### Run the baseline
 
