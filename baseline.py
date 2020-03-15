@@ -1,6 +1,7 @@
 import time
 
 from loguru import logger
+
 from tuner_comparison import (
     INPUT_SHAPE,
     NUM_CLASSES,

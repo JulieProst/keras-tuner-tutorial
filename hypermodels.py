@@ -1,3 +1,4 @@
+from kerastuner import HyperModel
 from tensorflow import keras
 from tensorflow.keras.layers import (
     Conv2D,
@@ -6,7 +7,6 @@ from tensorflow.keras.layers import (
     Flatten,
     MaxPooling2D
 )
-from kerastuner import HyperModel
 
 
 class CNNHyperModel(HyperModel):

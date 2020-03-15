@@ -1,13 +1,11 @@
 import time
-from pathlib import Path
 
-import tensorflow as tf
 from kerastuner.tuners import (
     Hyperband,
     RandomSearch,
 )
 from loguru import logger
-from tensorflow.keras.datasets import cifar10
+from pathlib import Path
 
 from hypermodels import CNNHyperModel
 from utils import (
