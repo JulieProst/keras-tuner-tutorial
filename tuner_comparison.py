@@ -1,13 +1,12 @@
 import time
-from pathlib import Path
 
-import tensorflow as tf
 from kerastuner.tuners import (
+    BayesianOptimization,
     Hyperband,
     RandomSearch,
 )
 from loguru import logger
-from tensorflow.keras.datasets import cifar10
+from pathlib import Path
 
 from hypermodels import CNNHyperModel
 from utils import (
@@ -24,6 +23,7 @@ N_EPOCH_SEARCH = 40
 HYPERBAND_MAX_EPOCHS = 40
 MAX_TRIALS = 20
 EXECUTION_PER_TRIAL = 2
+BAYESIAN_NUM_INITIAL_POINTS = 1
 
 
 def run_hyperparameter_tuning():
@@ -32,12 +32,18 @@ def run_hyperparameter_tuning():
     hypermodel = CNNHyperModel(input_shape=INPUT_SHAPE, num_classes=NUM_CLASSES)
 
     output_dir = Path("./output/cifar10/")
-    tuners = define_tuners(hypermodel, directory=output_dir, project_name='simple_cnn_tuning')
+    tuners = define_tuners(
+        hypermodel, directory=output_dir, project_name="simple_cnn_tuning"
+    )
 
     results = []
     for tuner in tuners:
-        elapsed_time, loss, accuracy = tuner_evaluation(tuner, x_test, x_train, y_test, y_train)
-        logger.info(f'Elapsed time = {elapsed_time:10.4f} s, accuracy = {accuracy}, loss = {loss}')
+        elapsed_time, loss, accuracy = tuner_evaluation(
+            tuner, x_test, x_train, y_test, y_train
+        )
+        logger.info(
+            f"Elapsed time = {elapsed_time:10.4f} s, accuracy = {accuracy}, loss = {loss}"
+        )
         results.append([elapsed_time, loss, accuracy])
     logger.info(results)
 
@@ -69,23 +75,32 @@ def tuner_evaluation(tuner, x_test, x_train, y_test, y_train):
 def define_tuners(hypermodel, directory, project_name):
     random_tuner = RandomSearch(
         hypermodel,
-        objective='val_accuracy',
+        objective="val_accuracy",
         seed=SEED,
         max_trials=MAX_TRIALS,
         executions_per_trial=EXECUTION_PER_TRIAL,
-        directory=f'{directory}_random_search',
-        project_name=project_name
+        directory=f"{directory}_random_search",
+        project_name=project_name,
     )
     hyperband_tuner = Hyperband(
         hypermodel,
         max_epochs=HYPERBAND_MAX_EPOCHS,
-        objective='val_accuracy',
+        objective="val_accuracy",
         seed=SEED,
         executions_per_trial=EXECUTION_PER_TRIAL,
-        directory=f'{directory}_hyperband',
+        directory=f"{directory}_hyperband",
+        project_name=project_name,
+    )
+    bayesian_tuner = BayesianOptimization(
+        hypermodel,
+        objective='val_accuracy',
+        seed=SEED,
+        num_initial_points=BAYESIAN_NUM_INITIAL_POINTS,
+        max_trials=MAX_TRIALS,
+        directory=f"{directory}_bayesian",
         project_name=project_name
     )
-    return [random_tuner, hyperband_tuner]
+    return [random_tuner, hyperband_tuner, bayesian_tuner]
 
 
 if __name__ == "__main__":
