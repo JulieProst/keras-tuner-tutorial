@@ -8,3 +8,7 @@ venv/
 .polyaxonignore
 .polyaxon/
 polyaxon_experiments/
+polyaxon_requirements.txt
+
+# outputs
+output/
